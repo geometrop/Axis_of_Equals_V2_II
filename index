@@ -1,33 +1,76 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <script src="https://www.youtube.com/iframe_api"></script>
-  <style>  
-    body {
-  background-color: #c38451; /* Change this color to the background color you want */
-}
 
-  .video-container {
-    border: 10px solid #c38461; /* Add a 10px border around the video container */
-    margin-bottom: 10px; 
-    margin-left: 10px;
-    margin-right: 10px;
-    display: inline-block; /* Display videos inline-block */
-    margin: 10px; /* Add margin to create space between videos */
-  }
-</style>
+  <!-- Roboto Font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+
+  <script src="https://www.youtube.com/iframe_api"></script>
+
+  <style>
+
+    body {
+      background-color: #c38451;
+      font-family: 'Roboto', sans-serif;
+      text-align: center;
+      color: white;
+    }
+
+    h1 {
+      font-size: 32px;
+      font-weight: 700;
+      margin-top: 20px;
+      margin-bottom: 20px;
+      letter-spacing: 1px;
+    }
+
+    .subtitle {
+      font-size: 16px;
+      font-weight: 300;
+      margin-bottom: 30px;
+    }
+
+    #playerContainer {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .video-container {
+      border: 10px solid #f2d2b6;
+      border-radius: 12px;
+      overflow: hidden;
+      margin: 15px;
+      display: inline-block;
+      box-shadow: 0px 4px 12px rgba(0,0,0,0.35);
+    }
+
+  </style>
 
 </head>
+
 <body>
+
+  <h1>PIXETROPE IV</h1>
+
+  <div class="subtitle">
+    Axis of Equals v2.0 — audio-tonomous playback system
+  </div>
+
   <div id="playerContainer"></div>
-  <button onclick="startRandomPlayback()">PIXETROPE IV: Axis of Equals v 2.0 (press play for audio-tonomous playback)</button>
+
+  <button onclick="startRandomPlayback()">
+    PRESS PLAY
+  </button>
 
   <script>
-     var videos = [
-      { id: 'CNfEFHPuweM', start: getRandomInt(0, 800) },    
+
+    var videos = [
+      { id: 'CNfEFHPuweM', start: getRandomInt(0, 800) },
       { id: 'DPsS3c-zO4c', start: getRandomInt(0, 800) },
       { id: '5596LLY806w', start: getRandomInt(0, 800) }
-      // Add more video IDs and start times as needed
     ];
 
     var players = [];
@@ -39,16 +82,18 @@
     }
 
     function createPlayer(playerId, videoId) {
+
       return new YT.Player(playerId, {
         height: '180',
         width: '320',
         videoId: videoId,
+
         playerVars: {
           autoplay: 1,
         },
-        
+
         events: {
-          onReady: function (event) {
+          onReady: function(event) {
             players.push(event.target);
             startRandomJump(event.target);
           },
@@ -57,83 +102,76 @@
     }
 
     function startRandomPlayback() {
+
       for (var i = 0; i < players.length; i++) {
-        var player = players[i];
-        var shouldPlay = Math.random() < 0.5; // 50% chance of stopping playback
-        if (shouldPlay) {
-          var startTime = getRandomInt(0, 500);
-          player.seekTo(startTime);
-          player.playVideo();
-        } else {
-          player.stopVideo();
-        }
-      }
-    }
 
-
-
-    
-
-    function startRandomJump(player) {
-      setTimeout(function () {
-       
-        var shouldPlay = Math.random() < 0.5; // 50% chance of stopping playback
-        if (shouldPlay) {
-          var newStartTime = getRandomInt(0, 1000);
-          player.seekTo(newStartTime);
-          player.playVideo();
-         
-        } else {
-          player.stopVideo();
-        }
-        startRandomJump(player);
-      }
-      , getRandomInt(5, 20) * 1000);
-    }
-
-    function startRandomPlayback() {
-      for (var i = 0; i < players.length; i++) {
         var player = players[i];
         var startTime = getRandomInt(0, 500);
+
         player.seekTo(startTime);
         player.playVideo();
+
         scheduleRandomPause(player);
       }
     }
 
     function startRandomJump(player) {
-      setTimeout(function () {
+
+      setTimeout(function() {
+
         var newStartTime = getRandomInt(0, 500);
+
         player.seekTo(newStartTime);
         player.playVideo();
+
         scheduleRandomPause(player);
+
         startRandomJump(player);
+
       }, getRandomInt(4, 100) * 1000);
     }
 
     function scheduleRandomPause(player) {
-      var pauseTime = getRandomInt(4, 100) * 1000; // Random pause time between 2 to 10 seconds
-      setTimeout(function () {
+
+      var pauseTime = getRandomInt(4, 100) * 1000;
+
+      setTimeout(function() {
+
         player.pauseVideo();
-        setTimeout(function () {
+
+        setTimeout(function() {
           player.playVideo();
-        }, getRandomInt(4, 100) * 1000); // Resume after a random delay
-        scheduleRandomPause(player); // Schedule the next pause
+        }, getRandomInt(4, 100) * 1000);
+
+        scheduleRandomPause(player);
+
       }, pauseTime);
     }
 
-    // Callback function when YouTube Iframe API is ready
+    // YouTube API Ready
     function onYouTubeIframeAPIReady() {
+
       for (var i = 0; i < videos.length; i++) {
+
         var playerId = 'player-' + i;
+
+        // Create bordered wrapper
+        var wrapper = document.createElement('div');
+        wrapper.className = 'video-container';
+
+        // Create player div
         var playerDiv = document.createElement('div');
         playerDiv.id = playerId;
-        document.getElementById('playerContainer').appendChild(playerDiv);
-        
-        var player = createPlayer(playerId, videos[i].id);
-        players.push(player);
+
+        wrapper.appendChild(playerDiv);
+
+        document.getElementById('playerContainer').appendChild(wrapper);
+
+        createPlayer(playerId, videos[i].id);
       }
     }
+
   </script>
+
 </body>
 </html>
