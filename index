@@ -20,6 +20,7 @@
 </head>
 <body>
   <div id="playerContainer"></div>
+<br>
   <button onclick="startRandomPlayback()">PIXETROPE IV: Axis of Equals v 2.0 (press play for audio-tonomous playback)</button>
 
   <script>
